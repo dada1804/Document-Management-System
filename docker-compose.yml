@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: dms_postgres
+    environment:
+      POSTGRES_DB: dms_users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dms_network
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: dms_mongodb
+    environment:
+      MONGO_INITDB_DATABASE: dms_files
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - dms_network
+
+  # Spring Boot Application
+  dms-app:
+    build: .
+    container_name: dms_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dms_users
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATA_MONGODB_HOST: mongodb
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: dms_files
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: password
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+    depends_on:
+      - postgres
+      - mongodb
+    networks:
+      - dms_network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+
+networks:
+  dms_network:
+    driver: bridge 

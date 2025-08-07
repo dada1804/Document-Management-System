@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: document-management-system
+  
+  # PostgreSQL Configuration for User Data
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dms_users
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  # MongoDB Configuration for File Storage
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: mongo
+      password: mongo
+      database: dms_files
+      authentication-database: admin
+  
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+
+# CORS Configuration
+cors:
+  allowed-origin-patterns: "http://localhost:*,https://localhost:*,http://127.0.0.1:*,https://127.0.0.1:*"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+  allowed-headers: "*"
+  allow-credentials: true
+  max-age: 3600
+
+# JWT Configuration
+jwt:
+  secret: 9a825ec87975b699104c675aeb969f359c2b31510e701647ba1863d68d7d93b9
+  expiration: 86400000 # 24 hours in milliseconds
+
+# Application Configuration
+app:
+  file:
+    allowed-extensions: pdf,doc,docx,txt,jpg,jpeg,png,gif,zip,rar
+    max-file-size: 104857600 # 100MB in bytes
+
+# Logging Configuration
+logging:
+  level:
+    com.dms: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n" 
