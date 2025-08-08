@@ -74,6 +74,8 @@ Desktop.ini
 
 # Application specific
 uploads/
+backend/uploads/
+backend/target/
 application-local.yml
 application-prod.yml
 

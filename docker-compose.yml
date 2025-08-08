@@ -33,7 +33,7 @@ services:
 
   # Spring Boot Application
   dms-app:
-    build: .
+    build: ./backend
     container_name: dms_app
     ports:
       - "8080:8080"
