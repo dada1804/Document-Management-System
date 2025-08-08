@@ -19,6 +19,7 @@ export interface Document {
   version: number;
   lastModified: string;
   downloadCount: number;
+  thumbnailContent?: string;
 }
 
 export interface DocumentUploadRequest {
@@ -50,6 +51,8 @@ export interface PageResponse<T> {
   first: boolean;
   last: boolean;
 }
+
+export interface DocumentContentResponse { content: string; }
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +88,10 @@ export class DocumentService {
 
   downloadDocument(id: string): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}/documents/download/${id}`, { responseType: 'blob' });
+  }
+
+  getDocumentContent(id: string): Observable<DocumentContentResponse> {
+    return this.http.get<DocumentContentResponse>(`${environment.apiUrl}/documents/${id}/content`);
   }
 
   getMyDocuments(page: number = 0, size: number = 10, sortBy: string = 'uploadDate', sortDir: string = 'desc'): Observable<PageResponse<Document>> {

@@ -294,7 +294,8 @@ public class DocumentController {
                 document.getTags(),
                 document.getVersion(),
                 document.getLastModified(),
-                document.getDownloadCount()
+                document.getDownloadCount(),
+                document.getThumbnailContent()
         );
     }
 

@@ -30,6 +30,9 @@ public class Document {
     @Field("file_content")
     private String fileContent; // Base64 encoded file content
 
+    @Field("thumbnail_content")
+    private String thumbnailContent; // Base64 encoded PNG thumbnail
+
     @Field("uploaded_by")
     private Long uploadedBy;
 
@@ -135,6 +138,14 @@ public class Document {
 
     public void setFileContent(String fileContent) {
         this.fileContent = fileContent;
+    }
+
+    public String getThumbnailContent() {
+        return thumbnailContent;
+    }
+
+    public void setThumbnailContent(String thumbnailContent) {
+        this.thumbnailContent = thumbnailContent;
     }
 
     public Long getUploadedBy() {

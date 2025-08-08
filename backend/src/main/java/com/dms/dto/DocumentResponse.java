@@ -20,6 +20,7 @@ public class DocumentResponse {
     private Integer version;
     private LocalDateTime lastModified;
     private Long downloadCount;
+    private String thumbnailContent;
 
     // Constructors
     public DocumentResponse() {}
@@ -27,7 +28,7 @@ public class DocumentResponse {
     public DocumentResponse(String id, String filename, String originalFilename, String contentType, 
                           Long fileSize, Long uploadedBy, String uploadedByUsername, LocalDateTime uploadDate, 
                           boolean isPublic, List<Long> allowedUsers, String description, List<String> tags, 
-                          Integer version, LocalDateTime lastModified, Long downloadCount) {
+                          Integer version, LocalDateTime lastModified, Long downloadCount, String thumbnailContent) {
         this.id = id;
         this.filename = filename;
         this.originalFilename = originalFilename;
@@ -43,6 +44,7 @@ public class DocumentResponse {
         this.version = version;
         this.lastModified = lastModified;
         this.downloadCount = downloadCount;
+        this.thumbnailContent = thumbnailContent;
     }
 
     // Getters and Setters
@@ -164,5 +166,13 @@ public class DocumentResponse {
 
     public void setDownloadCount(Long downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public String getThumbnailContent() {
+        return thumbnailContent;
+    }
+
+    public void setThumbnailContent(String thumbnailContent) {
+        this.thumbnailContent = thumbnailContent;
     }
 } 
