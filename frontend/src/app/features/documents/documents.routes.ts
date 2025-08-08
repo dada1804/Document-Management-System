@@ -10,8 +10,8 @@ export const DOCUMENTS_ROUTES: Routes = [
     loadComponent: () => import('./document-upload/document-upload.component').then(m => m.DocumentUploadComponent)
   },
   {
-    path: 'public',
-    loadComponent: () => import('./public-documents/public-documents.component').then(m => m.PublicDocumentsComponent)
+    path: 'shared',
+    loadComponent: () => import('./shared-documents/shared-documents.component').then(m => m.SharedDocumentsComponent)
   },
   {
     path: ':id',
