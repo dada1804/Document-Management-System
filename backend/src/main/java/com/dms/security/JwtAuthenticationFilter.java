@@ -40,32 +40,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            System.out.println("JWT Authentication Filter - Authorization header found: " + authorizationHeader.substring(0, 20) + "...");
-            System.out.println("JWT Authentication Filter - JWT token: " + jwt.substring(0, 20) + "...");
+        } else {
+            // Support EventSource (SSE) where headers cannot be set
+            String qpToken = request.getParameter("access_token");
+            if (qpToken != null && !qpToken.isBlank()) {
+                jwt = qpToken;
+            }
+        }
+
+        if (jwt != null) {
             try {
                 username = jwtTokenUtil.extractUsername(jwt);
-                System.out.println("JWT Authentication Filter - Username extracted: " + username);
             } catch (SignatureException e) {
                 logger.error("JWT signature verification failed", e);
-                System.out.println("JWT Authentication Filter - Signature verification failed: " + e.getMessage());
             } catch (ExpiredJwtException e) {
                 logger.error("JWT token is expired", e);
-                System.out.println("JWT Authentication Filter - Token expired: " + e.getMessage());
             } catch (UnsupportedJwtException e) {
                 logger.error("JWT token is unsupported", e);
-                System.out.println("JWT Authentication Filter - Token unsupported: " + e.getMessage());
             } catch (MalformedJwtException e) {
                 logger.error("JWT token is malformed", e);
-                System.out.println("JWT Authentication Filter - Token malformed: " + e.getMessage());
             } catch (IllegalArgumentException e) {
                 logger.error("JWT token is empty or null", e);
-                System.out.println("JWT Authentication Filter - Token empty or null: " + e.getMessage());
             } catch (Exception e) {
                 logger.error("Error extracting username from JWT token", e);
-                System.out.println("JWT Authentication Filter - Error extracting username: " + e.getMessage());
             }
         } else {
-            System.out.println("JWT Authentication Filter - No Authorization header or not Bearer token");
+            System.out.println("JWT Authentication Filter - No JWT provided");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

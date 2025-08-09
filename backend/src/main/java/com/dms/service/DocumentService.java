@@ -13,15 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.Base64;
 
 @Service
@@ -33,6 +32,9 @@ public class DocumentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Value("${app.file.allowed-extensions}")
     private String allowedExtensions;
 
@@ -42,7 +44,7 @@ public class DocumentService {
     private static final int THUMB_MAX_WIDTH = 480;
     private static final int THUMB_MAX_HEIGHT = 320;
 
-    public Document uploadDocument(MultipartFile file, Long userId, String description, 
+    public Document uploadDocument(MultipartFile file, Long userId, String description,
                                  List<String> tags, boolean isPublic, List<Long> allowedUsers) throws IOException {
         // Validate file
         validateFile(file);
@@ -86,7 +88,19 @@ public class DocumentService {
         document.setPublic(isPublic);
         document.setAllowedUsers(allowedUsers);
 
-        return documentRepository.save(document);
+        Document saved = documentRepository.save(document);
+
+        // Notify allowed users if any were granted access at upload
+        if (allowedUsers != null) {
+            for (Long recipientId : allowedUsers) {
+                if (!Objects.equals(recipientId, userId)) {
+                    String msg = String.format("%s shared the document '%s' with you", user.getUsername(), originalFilename);
+                    notificationService.createNotification(recipientId, userId, msg, saved.getId());
+                }
+            }
+        }
+
+        return saved;
     }
 
     public Optional<Document> getDocumentById(String documentId) {
@@ -124,7 +138,7 @@ public class DocumentService {
         return documentRepository.searchDocuments(searchTerm, pageable);
     }
 
-    public Document updateDocument(String documentId, String description, List<String> tags, 
+    public Document updateDocument(String documentId, String description, List<String> tags,
                                  boolean isPublic, List<Long> allowedUsers, Long userId) {
         Document document = documentRepository.findByIdAndIsDeletedFalse(documentId)
                 .orElseThrow(() -> new RuntimeException("Document not found"));
@@ -134,13 +148,28 @@ public class DocumentService {
             throw new RuntimeException("You can only modify your own documents");
         }
 
+        List<Long> previousAllowed = document.getAllowedUsers() != null ? new ArrayList<>(document.getAllowedUsers()) : new ArrayList<>();
+        List<Long> newAllowed = allowedUsers != null ? new ArrayList<>(allowedUsers) : new ArrayList<>();
+
         document.setDescription(description);
         document.setTags(tags);
         document.setPublic(isPublic);
-        document.setAllowedUsers(allowedUsers);
+        document.setAllowedUsers(newAllowed);
         document.updateLastModified();
 
-        return documentRepository.save(document);
+        Document saved = documentRepository.save(document);
+
+        // Compute newly added recipients and notify them
+        Set<Long> previousSet = new HashSet<>(previousAllowed);
+        for (Long recipientId : newAllowed) {
+            if (!previousSet.contains(recipientId) && !Objects.equals(recipientId, userId)) {
+                User owner = userService.findById(userId).orElseThrow();
+                String msg = String.format("%s granted you access to '%s'", owner.getUsername(), saved.getOriginalFilename());
+                notificationService.createNotification(recipientId, userId, msg, saved.getId());
+            }
+        }
+
+        return saved;
     }
 
     public void deleteDocument(String documentId, Long userId) {

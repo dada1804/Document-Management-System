@@ -51,6 +51,10 @@
           <mat-icon>group</mat-icon>
           <span>Shared with me</span>
         </a>
+        <a mat-list-item routerLink="/notifications" routerLinkActive="active">
+          <mat-icon [matBadge]="(unreadCount$ | async) || 0" matBadgeColor="warn" [matBadgeHidden]="((unreadCount$ | async) || 0) === 0">notifications</mat-icon>
+          <span>Notifications</span>
+        </a>
       </mat-nav-list>
     </mat-sidenav>
 
