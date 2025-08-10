@@ -1,45 +1,238 @@
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  padding: 1rem;
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 400px;
 }
 
 .login-card {
-  max-width: 400px;
-  width: 100%;
-  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  ::ng-deep .p-card {
+    border: none;
+    box-shadow: none;
+  }
+  
+  ::ng-deep .p-card-body {
+    padding: 0;
+  }
+  
+  ::ng-deep .p-card-content {
+    padding: 0;
+  }
 }
 
-mat-card-header {
+.card-header {
   text-align: center;
-  margin-bottom: 20px;
+  padding: 2rem 1.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  
+  h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+  
+  p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1rem;
+  }
 }
 
-mat-card-title {
-  font-size: 24px;
-  margin-bottom: 8px;
+.login-form {
+  padding: 2rem 1.5rem;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-mat-card-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.9rem;
 }
 
-.full-width {
+.form-actions {
+  margin-top: 2rem;
+}
+
+.card-footer {
+  text-align: center;
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.register-link {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.link-primary {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* PrimeNG component overrides */
+::ng-deep .p-inputtext,
+::ng-deep .p-password {
   width: 100%;
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  &.ng-invalid.ng-touched {
+    border-color: #dc3545;
+  }
 }
 
-button[type="submit"] {
-  height: 48px;
-  font-size: 16px;
+::ng-deep .p-password {
+  width: 100%;
+  
+  .p-password-input {
+    width: 100%;
+  }
+}
+
+::ng-deep .p-button {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s ease;
+  
+  &:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+::ng-deep .p-input-icon-left {
+  position: relative;
+  display: block;
+  
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 1;
+  }
+  
+  input {
+    padding-left: 2.5rem;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .login-container {
+    padding: 0.5rem;
+  }
+  
+  .login-wrapper {
+    max-width: 100%;
+  }
+  
+  .card-header {
+    padding: 1.5rem 1rem 1rem;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .login-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .card-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    padding: 1.25rem 0.75rem 0.75rem;
+    
+    h2 {
+      font-size: 1.25rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .login-form {
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-actions {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: #e2e8f0;
+  }
+  
+  .card-footer {
+    background: #2d3748;
+    border-top-color: #4a5568;
+  }
+  
+  .register-link {
+    color: #a0aec0;
+  }
+  
+  .link-primary {
+    color: #90cdf4;
+  }
+  
+  ::ng-deep .p-inputtext,
+  ::ng-deep .p-password {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+    
+    &:focus {
+      border-color: #667eea;
+    }
+    
+    &::placeholder {
+      color: #a0aec0;
+    }
+  }
 } 

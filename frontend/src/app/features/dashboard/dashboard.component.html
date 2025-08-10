@@ -3,123 +3,134 @@
   
   <!-- Statistics Cards -->
   <div class="stats-grid" *ngIf="!loading">
-    <mat-card class="stat-card">
-      <mat-card-content>
+    <p-card class="stat-card">
+      <ng-template pTemplate="content">
         <div class="stat-content">
-          <mat-icon class="stat-icon">folder</mat-icon>
+          <i class="pi pi-folder stat-icon"></i>
           <div class="stat-info">
             <h3>{{ stats?.userDocumentCount || 0 }}</h3>
             <p>My Documents</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="stat-card">
-      <mat-card-content>
+    <p-card class="stat-card">
+      <ng-template pTemplate="content">
         <div class="stat-content">
-          <mat-icon class="stat-icon">public</mat-icon>
+          <i class="pi pi-globe stat-icon"></i>
           <div class="stat-info">
             <h3>{{ stats?.publicDocumentCount || 0 }}</h3>
             <p>Public Documents</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </ng-template>
+    </p-card>
 
-    <mat-card class="stat-card">
-      <mat-card-content>
+    <p-card class="stat-card">
+      <ng-template pTemplate="content">
         <div class="stat-content">
-          <mat-icon class="stat-icon">cloud_upload</mat-icon>
+          <i class="pi pi-cloud-upload stat-icon"></i>
           <div class="stat-info">
             <h3>{{ recentDocuments.length || 0 }}</h3>
             <p>Recent Uploads</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </ng-template>
+    </p-card>
   </div>
 
   <!-- Loading Spinner -->
   <div class="loading-container" *ngIf="loading">
-    <mat-spinner diameter="50"></mat-spinner>
+    <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
     <p>Loading dashboard...</p>
   </div>
 
   <!-- Quick Actions -->
-  <mat-card class="action-card" *ngIf="!loading">
-    <mat-card-header>
-      <mat-card-title>Quick Actions</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+  <p-card class="action-card" *ngIf="!loading">
+    <ng-template pTemplate="header">
+      <h3>Quick Actions</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
       <div class="action-buttons">
-        <button mat-raised-button color="primary" routerLink="/documents/upload">
-          <mat-icon>cloud_upload</mat-icon>
-          Upload Document
+        <button pButton 
+                type="button" 
+                label="Upload Document" 
+                icon="pi pi-cloud-upload"
+                class="p-button-primary"
+                routerLink="/documents/upload">
         </button>
-        <button mat-raised-button color="accent" routerLink="/documents">
-          <mat-icon>folder</mat-icon>
-          View Documents
+        <button pButton 
+                type="button" 
+                label="View Documents" 
+                icon="pi pi-folder"
+                class="p-button-secondary"
+                routerLink="/documents">
         </button>
-        <button mat-raised-button routerLink="/documents/public">
-          <mat-icon>public</mat-icon>
-          Public Documents
+        <button pButton 
+                type="button" 
+                label="Public Documents" 
+                icon="pi pi-globe"
+                routerLink="/documents/public">
         </button>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </ng-template>
+  </p-card>
 
   <!-- Recent Documents -->
-  <mat-card class="recent-documents-card" *ngIf="!loading && recentDocuments.length > 0">
-    <mat-card-header>
-      <mat-card-title>Recent Documents</mat-card-title>
-      <mat-card-subtitle>Your latest uploads</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let doc of recentDocuments" class="document-item">
-          <mat-icon matListItemIcon [matTooltip]="doc.contentType">
-            {{ getFileIcon(doc.contentType) }}
-          </mat-icon>
-          <div matListItemTitle>{{ doc.originalFilename }}</div>
-          <div matListItemLine>
-            <span class="document-meta">
-              {{ formatFileSize(doc.fileSize) }} • 
-              {{ doc.uploadDate | date:'short' }}
-            </span>
-            <mat-chip-set>
-              <mat-chip *ngIf="doc.isPublic" color="primary" variant="outlined">Public</mat-chip>
-              <mat-chip *ngFor="let tag of doc.tags?.slice(0, 2)" variant="outlined">{{ tag }}</mat-chip>
-            </mat-chip-set>
+  <p-card class="recent-documents-card" *ngIf="!loading && recentDocuments.length > 0">
+    <ng-template pTemplate="header">
+      <h3>Recent Documents</h3>
+      <p>Your latest uploads</p>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <div class="document-list">
+        <div *ngFor="let doc of recentDocuments" class="document-item">
+          <div class="document-icon" [pTooltip]="doc.contentType">
+            <i class="pi" [ngClass]="getFileIcon(doc.contentType)"></i>
           </div>
-          <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="downloadDocument(doc.id)">
-              <mat-icon>download</mat-icon>
-              <span>Download</span>
-            </button>
-            <button mat-menu-item (click)="viewDocument(doc.id)">
-              <mat-icon>visibility</mat-icon>
-              <span>View Details</span>
-            </button>
-          </mat-menu>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+          <div class="document-info">
+            <div class="document-title">{{ doc.originalFilename }}</div>
+            <div class="document-meta">
+              <span class="document-meta">
+                {{ formatFileSize(doc.fileSize) }} • 
+                {{ doc.uploadDate | date:'short' }}
+              </span>
+              <div class="document-tags">
+                <p-chip *ngIf="doc.isPublic" label="Public" class="p-chip-primary"></p-chip>
+                <p-chip *ngFor="let tag of doc.tags?.slice(0, 2)" [label]="tag"></p-chip>
+              </div>
+            </div>
+          </div>
+          <p-menu #menu [popup]="true" [model]="getDocumentMenuItems(doc)">
+            <ng-template pTemplate="button">
+              <button pButton 
+                      type="button" 
+                      icon="pi pi-ellipsis-v"
+                      class="p-button-text p-button-rounded">
+              </button>
+            </ng-template>
+          </p-menu>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
 
   <!-- Empty State -->
-  <mat-card class="empty-state-card" *ngIf="!loading && (!recentDocuments || recentDocuments.length === 0)">
-    <mat-card-content class="empty-state-content">
-      <mat-icon class="empty-icon">folder_open</mat-icon>
-      <h3>No documents yet</h3>
-      <p>Start by uploading your first document</p>
-      <button mat-raised-button color="primary" routerLink="/documents/upload">
-        <mat-icon>cloud_upload</mat-icon>
-        Upload Document
-      </button>
-    </mat-card-content>
-  </mat-card>
+  <p-card class="empty-state-card" *ngIf="!loading && (!recentDocuments || recentDocuments.length === 0)">
+    <ng-template pTemplate="content">
+      <div class="empty-state-content">
+        <i class="pi pi-folder-open empty-icon"></i>
+        <h3>No documents yet</h3>
+        <p>Start by uploading your first document</p>
+        <button pButton 
+                type="button" 
+                label="Upload Document" 
+                icon="pi pi-cloud-upload"
+                class="p-button-primary"
+                routerLink="/documents/upload">
+        </button>
+      </div>
+    </ng-template>
+  </p-card>
 </div> 

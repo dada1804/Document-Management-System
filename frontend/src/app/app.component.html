@@ -1,66 +1,115 @@
 <div class="app-container">
-  <!-- Toolbar -->
-  <mat-toolbar color="primary" class="toolbar">
-    <button mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    
-    <span class="toolbar-title">Document Management System</span>
-    
-    <span class="spacer"></span>
-    
-    <ng-container *ngIf="currentUser$ | async as user; else authButtons">
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
+  <!-- Top Navigation Bar -->
+  <p-menubar class="main-menubar">
+    <ng-template pTemplate="start">
+      <button pButton 
+              icon="pi pi-bars" 
+              class="p-button-text p-button-rounded" 
+              (click)="toggleSidebar()"
+              aria-label="Toggle Sidebar">
       </button>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="navigateToProfile()">
-          <mat-icon>person</mat-icon>
-          <span>Profile</span>
-        </button>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu>
-    </ng-container>
-    
-    <ng-template #authButtons>
-      <button mat-button routerLink="/auth/login">Login</button>
-      <button mat-button routerLink="/auth/register">Register</button>
+      <span class="brand-title">Document Management System</span>
     </ng-template>
-  </mat-toolbar>
+    
+    <ng-template pTemplate="end">
+      <ng-container *ngIf="currentUser$ | async as user; else authButtons">
+        <p-avatar 
+          [label]="user.username.charAt(0).toUpperCase() || 'U'" 
+          shape="circle" 
+          size="normal"
+          class="user-avatar">
+        </p-avatar>
+        <p-menu #userMenu 
+                [popup]="true" 
+                [model]="userMenuItems" 
+                appendTo="body">
+        </p-menu>
+        <button pButton 
+                icon="pi pi-user" 
+                class="p-button-text p-button-rounded" 
+                (click)="userMenu.toggle($event)"
+                aria-label="User Menu">
+        </button>
+      </ng-container>
+      
+      <ng-template #authButtons>
+        <button pButton 
+                label="Login" 
+                class="p-button-text" 
+                routerLink="/auth/login">
+        </button>
+        <button pButton 
+                label="Register" 
+                class="p-button-outlined" 
+                routerLink="/auth/register">
+        </button>
+      </ng-template>
+    </ng-template>
+  </p-menubar>
 
-  <!-- Sidenav -->
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" opened class="sidenav">
-      <mat-nav-list>
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-          <mat-icon>dashboard</mat-icon>
+  <!-- Responsive Sidebar -->
+  <p-sidebar [(visible)]="sidebarVisible" 
+              position="left" 
+              [modal]="false" 
+              [showCloseIcon]="true"
+              class="main-sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <h3>Navigation</h3>
+      </div>
+      
+      <div class="sidebar-menu">
+        <a class="sidebar-item" 
+           routerLink="/dashboard" 
+           routerLinkActive="active"
+           (click)="sidebarVisible = false">
+          <i class="pi pi-home"></i>
           <span>Dashboard</span>
         </a>
-        <a mat-list-item routerLink="/documents" routerLinkActive="active">
-          <mat-icon>folder</mat-icon>
+        
+        <a class="sidebar-item" 
+           routerLink="/documents" 
+           routerLinkActive="active"
+           (click)="sidebarVisible = false">
+          <i class="pi pi-folder"></i>
           <span>Documents</span>
         </a>
-        <a mat-list-item routerLink="/documents/upload" routerLinkActive="active">
-          <mat-icon>cloud_upload</mat-icon>
+        
+        <a class="sidebar-item" 
+           routerLink="/documents/upload" 
+           routerLinkActive="active"
+           (click)="sidebarVisible = false">
+          <i class="pi pi-cloud-upload"></i>
           <span>Upload</span>
         </a>
-        <a mat-list-item routerLink="/documents/shared" routerLinkActive="active">
-          <mat-icon>group</mat-icon>
+        
+        <a class="sidebar-item" 
+           routerLink="/documents/shared" 
+           routerLinkActive="active"
+           (click)="sidebarVisible = false">
+          <i class="pi pi-users"></i>
           <span>Shared with me</span>
         </a>
-        <a mat-list-item routerLink="/notifications" routerLinkActive="active">
-          <mat-icon [matBadge]="(unreadCount$ | async) || 0" matBadgeColor="warn" [matBadgeHidden]="((unreadCount$ | async) || 0) === 0">notifications</mat-icon>
+        
+        <a class="sidebar-item" 
+           routerLink="/notifications" 
+           routerLinkActive="active"
+           (click)="sidebarVisible = false">
+          <i class="pi pi-bell"></i>
           <span>Notifications</span>
+          <p-badge *ngIf="(unreadCount$ | async) || 0 > 0" 
+                   [value]="(unreadCount$ | async) || 0" 
+                   severity="danger">
+          </p-badge>
         </a>
-      </mat-nav-list>
-    </mat-sidenav>
+      </div>
+    </div>
+  </p-sidebar>
 
-    <!-- Main content -->
-    <mat-sidenav-content class="main-content">
+  <!-- Main Content Area -->
+  <div class="main-content" [class.sidebar-open]="sidebarVisible">
+    <div class="container">
       <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    </div>
+  </div>
 </div> 

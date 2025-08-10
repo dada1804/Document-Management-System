@@ -4,42 +4,215 @@
   flex-direction: column;
 }
 
-.toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+/* Main Menubar Styles */
+.main-menubar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   z-index: 1000;
+  
+  ::ng-deep .p-menubar-root-list {
+    background: transparent;
+  }
+  
+  ::ng-deep .p-menubar-button {
+    color: white;
+  }
 }
 
-.toolbar-title {
-  margin-left: 8px;
-  font-size: 18px;
+.brand-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-left: 1rem;
+  white-space: nowrap;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.user-avatar {
+  margin-right: 0.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.sidenav-container {
+/* Sidebar Styles */
+.main-sidebar {
+  ::ng-deep .p-sidebar {
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+  
+  ::ng-deep .p-sidebar-content {
+    padding: 0;
+  }
+}
+
+.sidebar-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem 1rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  background: #fff;
+  
+  h3 {
+    margin: 0;
+    color: #495057;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+.sidebar-menu {
   flex: 1;
-  margin-top: 64px;
+  padding: 1rem 0;
 }
 
-.sidenav {
-  width: 250px;
-}
-
-.main-content {
-  padding: 20px;
-}
-
-.mat-nav-list .active {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-mat-nav-list a {
+.sidebar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  padding: 0.75rem 1rem;
+  color: #495057;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+  
+  &:hover {
+    background: #e9ecef;
+    color: #212529;
+    border-left-color: #667eea;
+  }
+  
+  &.active {
+    background: #667eea;
+    color: white;
+    border-left-color: #4c63d2;
+    
+    i {
+      color: white;
+    }
+  }
+  
+  i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+    color: #6c757d;
+    width: 20px;
+    text-align: center;
+  }
+  
+  span {
+    flex: 1;
+    font-weight: 500;
+  }
+  
+  p-badge {
+    margin-left: auto;
+  }
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  background: #f8f9fa;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+  
+  &.sidebar-open {
+    margin-left: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .brand-title {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+  }
+  
+  .main-menubar {
+    padding: 0.5rem;
+  }
+  
+  .sidebar-item {
+    padding: 1rem;
+    
+    i {
+      font-size: 1.2rem;
+      margin-right: 1rem;
+    }
+    
+    span {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .brand-title {
+    display: none;
+  }
+  
+  .main-menubar {
+    padding: 0.5rem;
+  }
+  
+  .sidebar-item {
+    padding: 1.25rem 1rem;
+    
+    i {
+      font-size: 1.3rem;
+      margin-right: 1rem;
+    }
+    
+    span {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .main-sidebar ::ng-deep .p-sidebar {
+    background: #2d3748;
+    border-right-color: #4a5568;
+  }
+  
+  .sidebar-header {
+    background: #1a202c;
+    border-bottom-color: #4a5568;
+    
+    h3 {
+      color: #e2e8f0;
+    }
+  }
+  
+  .sidebar-item {
+    color: #e2e8f0;
+    
+    &:hover {
+      background: #4a5568;
+      color: #f7fafc;
+    }
+    
+    &.active {
+      background: #667eea;
+      color: white;
+    }
+    
+    i {
+      color: #a0aec0;
+    }
+  }
+  
+  .main-content {
+    background: #1a202c;
+  }
 } 

@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService, LoginRequest } from '../../../core/services/auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,44 +15,44 @@ import { AuthService, LoginRequest } from '../../../core/services/auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule
+    RouterLink,
+    CardModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
   loading = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.loading = true;
-      const loginRequest: LoginRequest = this.loginForm.value;
+      const { username, password } = this.loginForm.value;
       
-      this.authService.login(loginRequest).subscribe({
+      this.authService.login({ username, password }).subscribe({
         next: () => {
-          this.toastr.success('Login successful!');
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
-          this.toastr.error(error.error || 'Login failed');
+          console.error('Login failed:', error);
           this.loading = false;
         }
       });

@@ -1,92 +1,148 @@
 <div class="register-container">
-  <mat-card class="register-card">
-    <mat-card-header>
-      <mat-card-title>Register</mat-card-title>
-      <mat-card-subtitle>Create a new account</mat-card-subtitle>
-    </mat-card-header>
-    
-    <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>Username</mat-label>
-          <input matInput formControlName="username" placeholder="Enter username">
-          <mat-icon matSuffix>person</mat-icon>
-          <mat-error *ngIf="registerForm.get('username')?.hasError('required')">
-            Username is required
-          </mat-error>
-          <mat-error *ngIf="registerForm.get('username')?.hasError('minlength')">
-            Username must be at least 3 characters
-          </mat-error>
-        </mat-form-field>
+  <div class="register-wrapper">
+    <p-card class="register-card">
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <h2>Create Account</h2>
+          <p>Join our document management system</p>
+        </div>
+      </ng-template>
+      
+      <ng-template pTemplate="content">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="username" class="form-label">Username</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-user"></i>
+                <input 
+                  id="username"
+                  pInputText 
+                  formControlName="username" 
+                  placeholder="Enter username"
+                  class="full-width"
+                  [class.ng-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+              </span>
+              <small class="p-error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+                <span *ngIf="registerForm.get('username')?.hasError('required')">Username is required</span>
+                <span *ngIf="registerForm.get('username')?.hasError('minlength')">Username must be at least 3 characters</span>
+              </small>
+            </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="Enter email">
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
-            Please enter a valid email
-          </mat-error>
-        </mat-form-field>
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-envelope"></i>
+                <input 
+                  id="email"
+                  pInputText 
+                  type="email" 
+                  formControlName="email" 
+                  placeholder="Enter email"
+                  class="full-width"
+                  [class.ng-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+              </span>
+              <small class="p-error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                <span *ngIf="registerForm.get('email')?.hasError('required')">Email is required</span>
+                <span *ngIf="registerForm.get('email')?.hasError('email')">Please enter a valid email</span>
+              </small>
+            </div>
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstName" placeholder="Enter first name">
-          <mat-icon matSuffix>person_outline</mat-icon>
-          <mat-error *ngIf="registerForm.get('firstName')?.hasError('required')">
-            First name is required
-          </mat-error>
-        </mat-form-field>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-user"></i>
+                <input 
+                  id="firstName"
+                  pInputText 
+                  formControlName="firstName" 
+                  placeholder="Enter first name"
+                  class="full-width"
+                  [class.ng-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+              </span>
+              <small class="p-error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                First name is required
+              </small>
+            </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastName" placeholder="Enter last name">
-          <mat-icon matSuffix>person_outline</mat-icon>
-          <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')">
-            Last name is required
-          </mat-error>
-        </mat-form-field>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-user"></i>
+                <input 
+                  id="lastName"
+                  pInputText 
+                  formControlName="lastName" 
+                  placeholder="Enter last name"
+                  class="full-width"
+                  [class.ng-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+              </span>
+              <small class="p-error" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                Last name is required
+              </small>
+            </div>
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Enter password">
-          <mat-icon matSuffix>lock</mat-icon>
-          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
-            Password is required
-          </mat-error>
-          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">
-            Password must be at least 6 characters
-          </mat-error>
-        </mat-form-field>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <p-password 
+                id="password"
+                formControlName="password" 
+                placeholder="Enter password"
+                [toggleMask]="true"
+                [feedback]="false"
+                class="full-width"
+                [class.ng-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+              </p-password>
+              <small class="p-error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                <span *ngIf="registerForm.get('password')?.hasError('required')">Password is required</span>
+                <span *ngIf="registerForm.get('password')?.hasError('minlength')">Password must be at least 6 characters</span>
+              </small>
+            </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password">
-          <mat-icon matSuffix>lock</mat-icon>
-          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
-            Confirm password is required
-          </mat-error>
-          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">
-            Passwords do not match
-          </mat-error>
-        </mat-form-field>
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <p-password 
+                id="confirmPassword"
+                formControlName="confirmPassword" 
+                placeholder="Confirm password"
+                [toggleMask]="true"
+                [feedback]="false"
+                class="full-width"
+                [class.ng-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+              </p-password>
+              <small class="p-error" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+                <span *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Confirm password is required</span>
+                <span *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">Passwords do not match</span>
+              </small>
+            </div>
+          </div>
 
-        <button 
-          mat-raised-button 
-          color="primary" 
-          type="submit" 
-          [disabled]="registerForm.invalid || loading"
-          class="full-width">
-          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
-          <span *ngIf="!loading">Register</span>
-        </button>
-      </form>
-    </mat-card-content>
-    
-    <mat-card-actions>
-      <button mat-button routerLink="/auth/login">Already have an account? Login</button>
-    </mat-card-actions>
-  </mat-card>
+          <div class="form-actions">
+            <button 
+              pButton 
+              type="submit" 
+              label="Create Account"
+              icon="pi pi-user-plus"
+              [disabled]="registerForm.invalid || loading"
+              [loading]="loading"
+              class="p-button-primary full-width">
+            </button>
+          </div>
+        </form>
+      </ng-template>
+      
+      <ng-template pTemplate="footer">
+        <div class="card-footer">
+          <p class="login-link">
+            Already have an account? 
+            <a routerLink="/auth/login" class="link-primary">Login here</a>
+          </p>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
 </div> 

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatBadgeModule } from '@angular/material/badge';
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { SidebarModule } from 'primeng/sidebar';
+import { MenuModule } from 'primeng/menu';
+import { BadgeModule } from 'primeng/badge';
+import { AvatarModule } from 'primeng/avatar';
+import { MenuItem } from 'primeng/api';
 import { AuthService, User } from './core/services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationService } from './core/services/notification.service';
@@ -20,13 +20,12 @@ import { NotificationService } from './core/services/notification.service';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatMenuModule,
-    MatBadgeModule
+    MenubarModule,
+    ButtonModule,
+    SidebarModule,
+    MenuModule,
+    BadgeModule,
+    AvatarModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -34,6 +33,8 @@ import { NotificationService } from './core/services/notification.service';
 export class AppComponent {
   currentUser$ = this.authService.currentUser$;
   unreadCount$ = this.notifications.unreadCount$;
+  sidebarVisible = false;
+  userMenuItems: MenuItem[] = [];
 
   constructor(
     private authService: AuthService,
@@ -44,6 +45,23 @@ export class AppComponent {
       this.notifications.connect();
       this.notifications.refreshUnreadCount();
     }
+    
+    this.initializeUserMenu();
+  }
+
+  private initializeUserMenu(): void {
+    this.userMenuItems = [
+      {
+        label: 'Profile',
+        icon: 'pi pi-user',
+        command: () => this.navigateToProfile()
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.logout()
+      }
+    ];
   }
 
   logout(): void {
@@ -58,5 +76,9 @@ export class AppComponent {
 
   navigateToNotifications(): void {
     this.router.navigate(['/notifications']);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarVisible = !this.sidebarVisible;
   }
 } 
