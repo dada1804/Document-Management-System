@@ -4,7 +4,7 @@
     <ng-template pTemplate="start">
       <button pButton 
               icon="pi pi-bars" 
-              class="p-button-text p-button-rounded" 
+              class="p-button-text p-button-rounded sidebar-toggle" 
               (click)="toggleSidebar()"
               aria-label="Toggle Sidebar">
       </button>
@@ -12,40 +12,52 @@
     </ng-template>
     
     <ng-template pTemplate="end">
-      <!-- Theme Toggle Button -->
-      <app-theme-toggle></app-theme-toggle>
-      
       <ng-container *ngIf="currentUser$ | async as user; else authButtons">
-        <p-avatar 
-          [label]="user.username.charAt(0).toUpperCase() || 'U'" 
-          shape="circle" 
-          size="normal"
-          class="user-avatar">
-        </p-avatar>
-        <p-menu #userMenu 
-                [popup]="true" 
-                [model]="userMenuItems" 
-                appendTo="body">
-        </p-menu>
-        <button pButton 
-                icon="pi pi-user" 
-                class="p-button-text p-button-rounded" 
-                (click)="userMenu.toggle($event)"
-                aria-label="User Menu">
-        </button>
+        <!-- User Section -->
+        <div class="user-section">
+          <!-- Theme Toggle -->
+          <app-theme-toggle></app-theme-toggle>
+          
+          <!-- User Info -->
+          <div class="user-info">
+            <span class="username">{{ user.username }}</span>
+            <p-avatar 
+              [label]="user.username.charAt(0).toUpperCase() || 'U'" 
+              shape="circle" 
+              size="normal"
+              class="user-avatar">
+            </p-avatar>
+          </div>
+          
+          <!-- User Menu -->
+          <p-menu #userMenu 
+                  [popup]="true" 
+                  [model]="userMenuItems" 
+                  appendTo="body">
+          </p-menu>
+          <button pButton 
+                  icon="pi pi-ellipsis-v" 
+                  class="p-button-text p-button-rounded user-menu-btn" 
+                  (click)="userMenu.toggle($event)"
+                  aria-label="User Menu">
+          </button>
+        </div>
       </ng-container>
       
       <ng-template #authButtons>
-        <button pButton 
-                label="Login" 
-                class="p-button-text" 
-                routerLink="/auth/login">
-        </button>
-        <button pButton 
-                label="Register" 
-                class="p-button-outlined" 
-                routerLink="/auth/register">
-        </button>
+        <div class="auth-section">
+          <app-theme-toggle></app-theme-toggle>
+          <button pButton 
+                  label="Login" 
+                  class="p-button-text" 
+                  routerLink="/auth/login">
+          </button>
+          <button pButton 
+                  label="Register" 
+                  class="p-button-outlined" 
+                  routerLink="/auth/register">
+          </button>
+        </div>
       </ng-template>
     </ng-template>
   </p-menubar>

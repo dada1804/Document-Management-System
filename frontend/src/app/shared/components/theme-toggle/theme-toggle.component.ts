@@ -18,19 +18,47 @@ import { ThemeService, Theme } from '../../../core/services/theme.service';
   `,
   styles: [`
     .theme-toggle-btn {
-      color: var(--text-primary) !important;
-      background: var(--bg-secondary) !important;
-      border: 1px solid var(--border-color) !important;
+      color: var(--navbar-text) !important;
+      background: var(--navbar-button-bg) !important;
+      border: 1px solid var(--navbar-button-border) !important;
       transition: all 0.3s ease !important;
+      width: 2.5rem !important;
+      height: 2.5rem !important;
       
       &:hover {
-        background: var(--bg-tertiary) !important;
-        border-color: var(--border-hover) !important;
+        background: var(--navbar-button-hover-bg) !important;
+        border-color: var(--navbar-button-hover-border) !important;
         transform: scale(1.05);
       }
       
       &:focus {
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3) !important;
+        box-shadow: 0 0 0 3px var(--navbar-button-border) !important;
+      }
+      
+      .p-button-icon {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .theme-toggle-btn {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+        
+        .p-button-icon {
+          font-size: 0.9rem;
+        }
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .theme-toggle-btn {
+        width: 2rem !important;
+        height: 2rem !important;
+        
+        .p-button-icon {
+          font-size: 0.85rem;
+        }
       }
     }
   `]

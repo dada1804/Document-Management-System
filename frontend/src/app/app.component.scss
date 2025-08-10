@@ -6,10 +6,10 @@
 
 /* Main Menubar Styles */
 .main-menubar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--navbar-bg);
   border: none;
   border-radius: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   z-index: 1000;
   
@@ -18,23 +18,119 @@
   }
   
   ::ng-deep .p-menubar-button {
-    color: white;
+    color: var(--navbar-text) !important;
+  }
+  
+  ::ng-deep .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+    color: var(--navbar-text) !important;
+  }
+  
+  ::ng-deep .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
+    color: var(--navbar-text) !important;
+  }
+}
+
+.sidebar-toggle {
+  color: var(--navbar-text) !important;
+  background: var(--navbar-button-bg) !important;
+  border: 1px solid var(--navbar-button-border) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background: var(--navbar-button-hover-bg) !important;
+    border-color: var(--navbar-button-hover-border) !important;
+    transform: scale(1.05);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px var(--navbar-button-border) !important;
   }
 }
 
 .brand-title {
-  color: white;
+  color: var(--navbar-text);
   font-size: 1.25rem;
   font-weight: 600;
   margin-left: 1rem;
   white-space: nowrap;
 }
 
+/* User Section Styles */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--navbar-user-bg);
+  border-radius: 8px;
+  border: 1px solid var(--navbar-user-border);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--navbar-user-hover-bg);
+    border-color: var(--navbar-user-hover-border);
+  }
+}
+
+.username {
+  color: var(--navbar-text);
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
 .user-avatar {
-  margin-right: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: var(--navbar-button-bg) !important;
+  color: var(--navbar-text) !important;
+  border: 2px solid var(--navbar-button-border) !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  
+  ::ng-deep .p-avatar {
+    background: var(--navbar-button-bg) !important;
+    border-radius: 50% !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  ::ng-deep .p-avatar-text {
+    background: transparent !important;
+    border-radius: 50% !important;
+  }
+}
+
+.user-menu-btn {
+  color: var(--navbar-text) !important;
+  background: var(--navbar-button-bg) !important;
+  border: 1px solid var(--navbar-button-border) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background: var(--navbar-button-hover-bg) !important;
+    border-color: var(--navbar-button-hover-border) !important;
+    transform: scale(1.05);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px var(--navbar-button-border) !important;
+  }
+}
+
+/* Auth Section Styles */
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0;
 }
 
 /* Sidebar Styles */
@@ -142,6 +238,18 @@
   --sidebar-item-hover-text: #212529;
   --sidebar-item-icon: #6c757d;
   --main-content-bg: #f8f9fa;
+  
+  /* Navbar light theme variables */
+  --navbar-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --navbar-text: #ffffff;
+  --navbar-button-bg: rgba(255, 255, 255, 0.15);
+  --navbar-button-border: rgba(255, 255, 255, 0.25);
+  --navbar-button-hover-bg: rgba(255, 255, 255, 0.25);
+  --navbar-button-hover-border: rgba(255, 255, 255, 0.4);
+  --navbar-user-bg: rgba(255, 255, 255, 0.15);
+  --navbar-user-border: rgba(255, 255, 255, 0.25);
+  --navbar-user-hover-bg: rgba(255, 255, 255, 0.25);
+  --navbar-user-hover-border: rgba(255, 255, 255, 0.4);
 }
 
 /* Dark theme variables */
@@ -155,17 +263,91 @@
   --sidebar-item-hover-text: #f7fafc;
   --sidebar-item-icon: #a0aec0;
   --main-content-bg: #1a202c;
+  
+  /* Navbar dark theme variables */
+  --navbar-bg: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  --navbar-text: #e2e8f0;
+  --navbar-button-bg: rgba(226, 232, 240, 0.1);
+  --navbar-button-border: rgba(226, 232, 240, 0.2);
+  --navbar-button-hover-bg: rgba(226, 232, 240, 0.2);
+  --navbar-button-hover-border: rgba(226, 232, 240, 0.4);
+  --navbar-user-bg: rgba(226, 232, 240, 0.1);
+  --navbar-user-border: rgba(226, 232, 240, 0.2);
+  --navbar-user-hover-bg: rgba(226, 232, 240, 0.15);
+  --navbar-user-hover-border: rgba(226, 232, 240, 0.3);
+}
+
+/* PrimeNG Dropdown Fixes */
+::ng-deep .p-dropdown-panel {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+/* Ensure navbar text visibility */
+.main-menubar {
+  ::ng-deep * {
+    color: var(--navbar-text) !important;
+  }
+  
+  ::ng-deep .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+    color: var(--navbar-text) !important;
+  }
+  
+  ::ng-deep .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
+    color: var(--navbar-text) !important;
+  }
+  
+  ::ng-deep .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-icon {
+    color: var(--navbar-text) !important;
+  }
+}
+
+::ng-deep .p-dropdown-items-wrapper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+}
+
+::ng-deep .p-dropdown-item {
+  padding: 0.75rem 1rem !important;
+  cursor: pointer !important;
+}
+
+::ng-deep .p-dropdown-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.dark-theme ::ng-deep .p-dropdown-item:hover {
+  background-color: #4a5568 !important;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .main-menubar {
+    padding: 0.5rem 1rem;
+  }
+  
   .brand-title {
     font-size: 1rem;
     margin-left: 0.5rem;
   }
   
-  .main-menubar {
-    padding: 0.5rem;
+  .user-section {
+    gap: 0.75rem;
+  }
+  
+  .user-info {
+    padding: 0.4rem 0.6rem;
+    gap: 0.5rem;
+  }
+  
+  .username {
+    font-size: 0.8rem;
+  }
+  
+  .user-avatar {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    font-size: 0.8rem !important;
   }
   
   .sidebar-item {
@@ -183,12 +365,31 @@
 }
 
 @media (max-width: 576px) {
+  .main-menubar {
+    padding: 0.5rem;
+  }
+  
   .brand-title {
     display: none;
   }
   
-  .main-menubar {
-    padding: 0.5rem;
+  .user-section {
+    gap: 0.5rem;
+  }
+  
+  .user-info {
+    padding: 0.3rem 0.5rem;
+    gap: 0.4rem;
+  }
+  
+  .username {
+    display: none;
+  }
+  
+  .user-avatar {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 0.75rem !important;
   }
   
   .sidebar-item {

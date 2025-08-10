@@ -87,7 +87,8 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
                 (onChange)="loadDocuments()"
                 placeholder="Sort by"
                 optionLabel="label"
-                optionValue="value">
+                optionValue="value"
+                appendTo="body">
               </p-dropdown>
             </div>
 
@@ -98,7 +99,8 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
                 (onChange)="loadDocuments()"
                 placeholder="Order"
                 optionLabel="label"
-                optionValue="value">
+                optionValue="value"
+                appendTo="body">
               </p-dropdown>
             </div>
 
