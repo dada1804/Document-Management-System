@@ -6,7 +6,7 @@
 
 h1 {
   margin-bottom: 24px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .stats-grid {
@@ -19,6 +19,8 @@ h1 {
 .stat-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-content {
@@ -46,6 +48,9 @@ h1 {
 
 .action-card {
   margin-bottom: 24px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .action-buttons {
@@ -63,24 +68,36 @@ h1 {
 
 .recent-documents-card {
   margin-bottom: 24px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .document-item {
-  border-bottom: 1px solid #eee;
-}
-
-.document-item:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: var(--bg-secondary);
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .document-meta {
-  color: #666;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
 .empty-state-card {
   text-align: center;
   padding: 40px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .empty-state-content {
@@ -94,7 +111,7 @@ h1 {
   font-size: 64px;
   width: 64px;
   height: 64px;
-  color: #ccc;
+  color: var(--text-muted);
 }
 
 .loading-container {

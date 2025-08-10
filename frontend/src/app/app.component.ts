@@ -11,6 +11,8 @@ import { MenuItem } from 'primeng/api';
 import { AuthService, User } from './core/services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationService } from './core/services/notification.service';
+import { ThemeService, Theme } from './core/services/theme.service';
+import { ThemeToggleComponent } from './shared/components';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,8 @@ import { NotificationService } from './core/services/notification.service';
     SidebarModule,
     MenuModule,
     BadgeModule,
-    AvatarModule
+    AvatarModule,
+    ThemeToggleComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -33,13 +36,15 @@ import { NotificationService } from './core/services/notification.service';
 export class AppComponent {
   currentUser$ = this.authService.currentUser$;
   unreadCount$ = this.notifications.unreadCount$;
+  currentTheme$ = this.themeService.currentTheme$;
   sidebarVisible = false;
   userMenuItems: MenuItem[] = [];
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private notifications: NotificationService
+    private notifications: NotificationService,
+    private themeService: ThemeService
   ) {
     if (this.authService.isAuthenticated()) {
       this.notifications.connect();

@@ -1,5 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* CSS Variables for theming */
+:root {
+  /* Light theme variables */
+  --primary-color: #667eea;
+  --primary-hover: #5a67d8;
+  --secondary-color: #764ba2;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #edf2f7;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --success-color: #48bb78;
+  --warning-color: #ed8936;
+  --error-color: #f56565;
+  --info-color: #4299e1;
+}
+
+.dark-theme {
+  /* Dark theme variables */
+  --primary-color: #667eea;
+  --primary-hover: #5a67d8;
+  --secondary-color: #764ba2;
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #4a5568;
+  --border-color: #4a5568;
+  --border-hover: #718096;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.3);
+  --success-color: #48bb78;
+  --warning-color: #ed8936;
+  --error-color: #f56565;
+  --info-color: #4299e1;
+}
+
 html, body { 
   height: 100%; 
   margin: 0;
@@ -8,6 +55,9 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   line-height: 1.5;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -20,24 +70,27 @@ html, body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--text-muted);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-secondary);
 }
 
 /* PrimeNG overrides and enhancements */
 .p-card {
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
   border-radius: 12px;
   overflow: hidden;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 .p-inputtext,
@@ -46,12 +99,18 @@ html, body {
 .p-multiselect {
   width: 100%;
   border-radius: 8px;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-color);
   transition: all 0.2s ease;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   
   &:focus {
-    border-color: #667eea;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  &::placeholder {
+    color: var(--text-muted);
   }
 }
 
@@ -62,26 +121,76 @@ html, body {
   
   &:not(:disabled):hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
   }
 }
 
 .p-paginator {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  
   .p-paginator-pages {
     .p-paginator-page {
       border-radius: 6px;
       margin: 0 2px;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      
+      &:hover {
+        background-color: var(--bg-secondary);
+      }
+      
+      &.p-highlight {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
     }
   }
 }
 
 .p-menu {
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-xl);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  
+  .p-menuitem-link {
+    color: var(--text-primary);
+    
+    &:hover {
+      background-color: var(--bg-secondary);
+    }
+  }
 }
 
 .p-sidebar {
   border-radius: 0 12px 12px 0;
+  background-color: var(--bg-primary);
+}
+
+.p-menubar {
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  
+  .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+    color: var(--text-primary);
+    
+    &:hover {
+      background-color: var(--bg-secondary);
+    }
+  }
+}
+
+.p-avatar {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.p-badge {
+  background-color: var(--error-color);
+  color: white;
 }
 
 /* Utility classes */
@@ -321,35 +430,6 @@ html, body {
   .p-button,
   .p-inputtext {
     border-width: 0.5px;
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  html, body {
-    background-color: #1a1a1a;
-    color: #ffffff;
-  }
-  
-  .p-card {
-    background-color: #2d2d2d;
-    color: #ffffff;
-  }
-  
-  .p-inputtext,
-  .p-password,
-  .p-dropdown {
-    background-color: #2d2d2d;
-    border-color: #4a4a4a;
-    color: #ffffff;
-    
-    &:focus {
-      border-color: #667eea;
-    }
-    
-    &::placeholder {
-      color: #a0a0a0;
-    }
   }
 }
 

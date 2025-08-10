@@ -40,8 +40,8 @@
 /* Sidebar Styles */
 .main-sidebar {
   ::ng-deep .p-sidebar {
-    background: #f8f9fa;
-    border-right: 1px solid #dee2e6;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
     box-shadow: 2px 0 8px rgba(0,0,0,0.1);
   }
   
@@ -58,12 +58,12 @@
 
 .sidebar-header {
   padding: 1.5rem 1rem 1rem;
-  border-bottom: 1px solid #dee2e6;
-  background: #fff;
+  border-bottom: 1px solid var(--sidebar-border);
+  background: var(--sidebar-header-bg);
   
   h3 {
     margin: 0;
-    color: #495057;
+    color: var(--sidebar-header-text);
     font-size: 1.1rem;
     font-weight: 600;
   }
@@ -78,15 +78,15 @@
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  color: #495057;
+  color: var(--sidebar-item-text);
   text-decoration: none;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
   position: relative;
   
   &:hover {
-    background: #e9ecef;
-    color: #212529;
+    background: var(--sidebar-item-hover-bg);
+    color: var(--sidebar-item-hover-text);
     border-left-color: #667eea;
   }
   
@@ -103,7 +103,7 @@
   i {
     margin-right: 0.75rem;
     font-size: 1.1rem;
-    color: #6c757d;
+    color: var(--sidebar-item-icon);
     width: 20px;
     text-align: center;
   }
@@ -121,13 +121,40 @@
 /* Main Content Area */
 .main-content {
   flex: 1;
-  background: #f8f9fa;
+  background: var(--main-content-bg);
   transition: margin-left 0.3s ease;
   overflow-y: auto;
   
   &.sidebar-open {
     margin-left: 0;
   }
+}
+
+/* CSS Variables for theming */
+:root {
+  /* Light theme variables */
+  --sidebar-bg: #f8f9fa;
+  --sidebar-border: #dee2e6;
+  --sidebar-header-bg: #fff;
+  --sidebar-header-text: #495057;
+  --sidebar-item-text: #495057;
+  --sidebar-item-hover-bg: #e9ecef;
+  --sidebar-item-hover-text: #212529;
+  --sidebar-item-icon: #6c757d;
+  --main-content-bg: #f8f9fa;
+}
+
+/* Dark theme variables */
+.dark-theme {
+  --sidebar-bg: #2d3748;
+  --sidebar-border: #4a5568;
+  --sidebar-header-bg: #1a202c;
+  --sidebar-header-text: #e2e8f0;
+  --sidebar-item-text: #e2e8f0;
+  --sidebar-item-hover-bg: #4a5568;
+  --sidebar-item-hover-text: #f7fafc;
+  --sidebar-item-icon: #a0aec0;
+  --main-content-bg: #1a202c;
 }
 
 /* Responsive Design */
@@ -175,44 +202,5 @@
     span {
       font-size: 1.1rem;
     }
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .main-sidebar ::ng-deep .p-sidebar {
-    background: #2d3748;
-    border-right-color: #4a5568;
-  }
-  
-  .sidebar-header {
-    background: #1a202c;
-    border-bottom-color: #4a5568;
-    
-    h3 {
-      color: #e2e8f0;
-    }
-  }
-  
-  .sidebar-item {
-    color: #e2e8f0;
-    
-    &:hover {
-      background: #4a5568;
-      color: #f7fafc;
-    }
-    
-    &.active {
-      background: #667eea;
-      color: white;
-    }
-    
-    i {
-      color: #a0aec0;
-    }
-  }
-  
-  .main-content {
-    background: #1a202c;
   }
 } 

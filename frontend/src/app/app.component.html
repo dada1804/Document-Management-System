@@ -12,6 +12,9 @@
     </ng-template>
     
     <ng-template pTemplate="end">
+      <!-- Theme Toggle Button -->
+      <app-theme-toggle></app-theme-toggle>
+      
       <ng-container *ngIf="currentUser$ | async as user; else authButtons">
         <p-avatar 
           [label]="user.username.charAt(0).toUpperCase() || 'U'" 

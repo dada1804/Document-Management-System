@@ -272,7 +272,7 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
       margin: 0;
       font-size: 2rem;
       font-weight: 600;
-      color: #333;
+      color: var(--text-primary);
     }
     
     .header-actions { 
@@ -385,12 +385,12 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
     
     .title { 
       font-weight: 600; 
-      color: #1f2937; 
+      color: var(--text-primary); 
       margin-bottom: 6px; 
     }
     
     .meta { 
-      color: #6b7280; 
+      color: var(--text-secondary); 
       font-size: 12px; 
       display: flex; 
       align-items: center; 
@@ -423,11 +423,16 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
     }
     
     .document-item { 
-      border-bottom: 1px solid #eee; 
+      border-bottom: 1px solid var(--border-color); 
       padding: 12px 0; 
       display: flex;
       align-items: center;
       gap: 16px;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: var(--bg-secondary);
+      }
     }
     
     .document-item:last-child { 
@@ -449,7 +454,7 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
     }
     
     .document-meta { 
-      color: #666; 
+      color: var(--text-muted); 
       font-size: 13px; 
     }
     
@@ -476,7 +481,7 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
     }
 
     .more-tags {
-      color: #666;
+      color: var(--text-muted);
       font-size: 12px;
       align-self: center;
     }
