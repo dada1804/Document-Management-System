@@ -32,7 +32,8 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
     MenuModule,
     PaginatorModule,
     TooltipModule,
-    ButtonGroupModule
+    ButtonGroupModule,
+    DataViewModule
   ],
   template: `
     <div class="document-list-container">
@@ -198,48 +199,55 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
         </div>
 
         <!-- List view -->
-        <p-dataView *ngIf="documents.length > 0 && viewMode === 'list'" 
-                    [value]="documents" 
-                    [paginator]="false"
-                    layout="list"
-                    class="document-list">
-          <ng-template pTemplate="list" let-doc>
-            <div class="document-item">
-              <div class="document-icon">
-                <i class="pi" [class]="getFileIcon(doc.contentType)"></i>
-              </div>
-              <div class="document-title truncate">{{ doc.originalFilename }}</div>
-              <div class="document-details">
-                <span class="document-meta">
-                  {{ getFileTypeLabel(doc.contentType) }} • {{ formatFileSize(doc.fileSize) }} • {{ doc.uploadDate | date:'short' }} • {{ doc.downloadCount }} downloads
-                </span>
-                <div class="document-tags" *ngIf="doc.tags && doc.tags.length > 0">
-                  <p-chip *ngFor="let tag of doc.tags.slice(0, 3)" [label]="tag" severity="secondary"></p-chip>
-                  <span *ngIf="doc.tags.length > 3" class="more-tags">+{{ doc.tags.length - 3 }}</span>
-                </div>
-              </div>
-              <div class="document-actions">
-                <p-button 
-                  icon="pi pi-download" 
-                  (click)="downloadDocument(doc.id)" 
-                  pTooltip="Download"
-                  class="p-button-text p-button-rounded">
-                </p-button>
-                <p-menu #menu 
-                        [popup]="true" 
-                        [model]="getDocumentMenuItems(doc)"
-                        appendTo="body">
-                </p-menu>
-                <p-button 
-                  icon="pi pi-ellipsis-v" 
-                  (click)="menu.toggle($event)" 
-                  pTooltip="More options"
-                  class="p-button-text p-button-rounded">
-                </p-button>
-              </div>
-            </div>
-          </ng-template>
-        </p-dataView>
+<p-dataView *ngIf="documents.length > 0 && viewMode === 'list'" 
+            [value]="documents" 
+            [paginator]="false"
+            layout="list"
+            class="document-list">
+  <ng-template pTemplate="list" let-documents>
+    <div class="col-12" *ngFor="let doc of documents" class="col-12">
+      <div class="document-item" (click)="viewDocument(doc.id)">
+        <div class="document-icon">
+          <i class="pi" [class]="getFileIcon(doc.contentType)"></i>
+        </div>
+        
+        <div class="document-info">
+          <div class="document-title truncate">{{ doc.originalFilename }}</div>
+          <div class="document-meta">
+            {{ getFileTypeLabel(doc.contentType) }} • {{ formatFileSize(doc.fileSize) }} • {{ doc.uploadDate | date:'short' }} • {{ doc.downloadCount }} downloads
+          </div>
+          <div class="document-tags" *ngIf="doc.tags && doc.tags.length > 0">
+            <p-chip *ngFor="let tag of doc.tags.slice(0, 3)" [label]="tag" severity="secondary"></p-chip>
+            <span *ngIf="doc.tags.length > 3" class="more-tags">+{{ doc.tags.length - 3 }}</span>
+          </div>
+        </div>
+        
+        <div class="document-actions" (click)="$event.stopPropagation()">
+          <p-button 
+            icon="pi pi-download" 
+            (click)="downloadDocument(doc.id)" 
+            pTooltip="Download"
+            class="p-button-text p-button-rounded">
+          </p-button>
+          <p-menu #menu 
+                  [popup]="true" 
+                  [model]="getDocumentMenuItems(doc)"
+                  appendTo="body">
+          </p-menu>
+          <p-button 
+            icon="pi pi-ellipsis-v" 
+            (click)="menu.toggle($event)" 
+            pTooltip="More options"
+            class="p-button-text p-button-rounded">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dataView>
+
+
+
 
         <!-- Pagination -->
         <p-paginator 
@@ -664,6 +672,7 @@ export class DocumentListComponent implements OnInit {
       .subscribe({
         next: (response: PageResponse<Document>) => {
           this.documents = response.content;
+          console.log(this.documents);
           this.totalElements = response.totalElements;
           this.loadPreviews();
           this.loading = false;
