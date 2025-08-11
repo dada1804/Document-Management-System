@@ -80,6 +80,22 @@ interface UserSummary { id: number; username: string; email: string; firstName: 
               </div>
             </ng-template>
           </p-multiSelect>
+          
+          <!-- Display currently selected users -->
+          <div class="selected-users-display" *ngIf="selectedUserIds.length > 0">
+            <h4>Currently Selected Users:</h4>
+            <div class="selected-users-list">
+              <div class="selected-user-item" *ngFor="let userId of selectedUserIds">
+                <span class="selected-username">{{ getUserDisplayName(userId) }}</span>
+                <p-button 
+                  icon="pi pi-times" 
+                  class="p-button-text p-button-rounded p-button-danger"
+                  (click)="removeUser(userId)"
+                  pTooltip="Remove user">
+                </p-button>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div class="access-actions">
@@ -211,18 +227,55 @@ interface UserSummary { id: number; username: string; email: string; firstName: 
     
     .username {
       font-weight: 500;
-      color: #2d3748;
+      color: var(--text-primary, #2d3748);
     }
     
     .email {
       font-size: 0.85rem;
-      color: #718096;
+      color: var(--text-secondary, #718096);
     }
     
     .access-actions {
       display: flex;
       justify-content: flex-end;
       padding-top: 16px;
+    }
+
+    /* Selected Users Display */
+    .selected-users-display {
+      margin-top: 16px;
+      padding: 16px;
+      background-color: var(--bg-secondary, #f9fafb);
+      border: 1px solid var(--border-color, #d1d5db);
+      border-radius: 8px;
+    }
+
+    .selected-users-display h4 {
+      margin: 0 0 12px 0;
+      color: var(--text-primary, #374151);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .selected-users-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .selected-user-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background-color: var(--bg-primary, #ffffff);
+      border: 1px solid var(--border-color, #d1d5db);
+      border-radius: 6px;
+    }
+
+    .selected-username {
+      color: var(--text-primary, #374151);
+      font-weight: 500;
     }
 
     /* Responsive Design */
@@ -335,12 +388,143 @@ interface UserSummary { id: number; username: string; email: string; firstName: 
       }
       
       .username {
-        color: #e2e8f0;
+        color: var(--text-primary, #e2e8f0);
       }
       
       .email {
-        color: #a0aec0;
+        color: var(--text-secondary, #a0aec0);
       }
+    }
+
+    /* PrimeNG MultiSelect Styling for better visibility */
+    ::ng-deep .p-multiselect {
+      background-color: var(--bg-primary, #ffffff) !important;
+      border-color: var(--border-color, #d1d5db) !important;
+      color: var(--text-primary, #374151) !important;
+    }
+
+    ::ng-deep .p-multiselect:not(.p-disabled):hover {
+      border-color: var(--primary-color, #3b82f6) !important;
+    }
+
+    ::ng-deep .p-multiselect:not(.p-disabled).p-focus {
+      border-color: var(--primary-color, #3b82f6) !important;
+      box-shadow: 0 0 0 2px var(--primary-color, #3b82f6) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel {
+      background-color: var(--bg-primary, #ffffff) !important;
+      border-color: var(--border-color, #d1d5db) !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-header {
+      background-color: var(--bg-secondary, #f9fafb) !important;
+      border-bottom-color: var(--border-color, #d1d5db) !important;
+      color: var(--text-primary, #374151) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
+      background-color: var(--bg-primary, #ffffff) !important;
+      border-color: var(--border-color, #d1d5db) !important;
+      color: var(--text-primary, #374151) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext:focus {
+      border-color: var(--primary-color, #3b82f6) !important;
+      box-shadow: 0 0 0 2px var(--primary-color, #3b82f6) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items {
+      background-color: var(--bg-primary, #ffffff) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+      background-color: var(--bg-primary, #ffffff) !important;
+      color: var(--text-primary, #374151) !important;
+      border: none !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item:hover {
+      background-color: var(--bg-secondary, #f9fafb) !important;
+      color: var(--text-primary, #374151) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+      background-color: var(--primary-color, #3b82f6) !important;
+      color: white !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
+      margin-right: 0.5rem !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box {
+      background-color: var(--bg-primary, #ffffff) !important;
+      border-color: var(--border-color, #d1d5db) !important;
+    }
+
+    ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
+      background-color: var(--primary-color, #3b82f6) !important;
+      border-color: var(--primary-color, #3b82f6) !important;
+    }
+
+    /* Dark theme overrides for MultiSelect */
+    .dark-theme ::ng-deep .p-multiselect {
+      background-color: var(--bg-primary, #2d3748) !important;
+      border-color: var(--border-color, #4a5568) !important;
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel {
+      background-color: var(--bg-primary, #2d3748) !important;
+      border-color: var(--border-color, #4a5568) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel .p-multiselect-header {
+      background-color: var(--bg-secondary, #4a5568) !important;
+      border-bottom-color: var(--border-color, #4a5568) !important;
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
+      background-color: var(--bg-primary, #2d3748) !important;
+      border-color: var(--border-color, #4a5568) !important;
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+      background-color: var(--bg-primary, #2d3748) !important;
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item:hover {
+      background-color: var(--bg-secondary, #4a5568) !important;
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box {
+      background-color: var(--bg-primary, #2d3748) !important;
+      border-color: var(--border-color, #4a5568) !important;
+    }
+
+    /* Dark theme for selected users display */
+    .dark-theme .selected-users-display {
+      background-color: var(--bg-secondary, #4a5568) !important;
+      border-color: var(--border-color, #4a5568) !important;
+    }
+
+    .dark-theme .selected-users-display h4 {
+      color: var(--text-primary, #e2e8f0) !important;
+    }
+
+    .dark-theme .selected-user-item {
+      background-color: var(--bg-primary, #2d3748) !important;
+      border-color: var(--border-color, #4a5568) !important;
+    }
+
+    .dark-theme .selected-username {
+      color: var(--text-primary, #e2e8f0) !important;
     }
   `]
 })

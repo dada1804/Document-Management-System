@@ -1,14 +1,15 @@
 <div class="app-container">
   <!-- Top Navigation Bar -->
-  <p-menubar class="main-menubar">
+  <p-menubar class="main-menubar" [ngStyle]="{'background': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 'color': 'white'}">
     <ng-template pTemplate="start">
       <button pButton 
               icon="pi pi-bars" 
               class="p-button-text p-button-rounded sidebar-toggle" 
               (click)="toggleSidebar()"
+              [ngStyle]="{'color': 'white', 'background': 'rgba(255,255,255,0.15)', 'border': '1px solid rgba(255,255,255,0.25)'}"
               aria-label="Toggle Sidebar">
       </button>
-      <span class="brand-title">Document Management System</span>
+      <span class="brand-title" [ngStyle]="{'color': 'white'}">Document Management System</span>
     </ng-template>
     
     <ng-template pTemplate="end">
@@ -19,12 +20,13 @@
           <app-theme-toggle></app-theme-toggle>
           
           <!-- User Info -->
-          <div class="user-info">
-            <span class="username">{{ user.username }}</span>
+          <div class="user-info" [ngStyle]="{'background': 'rgba(255,255,255,0.15)', 'border': '1px solid rgba(255,255,255,0.25)', 'color': 'white'}">
+            <span class="username" [ngStyle]="{'color': 'white'}">{{ user.username }}</span>
             <p-avatar 
               [label]="user.username.charAt(0).toUpperCase() || 'U'" 
               shape="circle" 
               size="normal"
+              [ngStyle]="{'background': 'rgba(255,255,255,0.15)', 'color': 'white', 'border': '2px solid rgba(255,255,255,0.25)'}"
               class="user-avatar">
             </p-avatar>
           </div>
@@ -39,6 +41,7 @@
                   icon="pi pi-ellipsis-v" 
                   class="p-button-text p-button-rounded user-menu-btn" 
                   (click)="userMenu.toggle($event)"
+                  [ngStyle]="{'color': 'white', 'background': 'rgba(255,255,255,0.15)', 'border': '1px solid rgba(255,255,255,0.25)'}"
                   aria-label="User Menu">
           </button>
         </div>
@@ -50,11 +53,13 @@
           <button pButton 
                   label="Login" 
                   class="p-button-text" 
+                  [ngStyle]="{'color': 'white'}"
                   routerLink="/auth/login">
           </button>
           <button pButton 
                   label="Register" 
                   class="p-button-outlined" 
+                  [ngStyle]="{'color': 'white', 'border-color': 'white'}"
                   routerLink="/auth/register">
           </button>
         </div>
