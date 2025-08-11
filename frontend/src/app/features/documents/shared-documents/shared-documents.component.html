@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="header">
+    <h1>Shared with me</h1>
+    <p>All documents you can access</p>
+  </div>
+
+  <div class="content">
+    <div *ngIf="loading" class="loading">
+      <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+      <p>Loading documents...</p>
+    </div>
+
+    <div *ngIf="!loading && documents.length === 0" class="empty-state">
+      <i class="pi pi-folder-open empty-icon"></i>
+      <h3>No Documents</h3>
+      <p>No one has shared documents with you yet.</p>
+    </div>
+
+    <div *ngIf="!loading && documents.length > 0" class="documents-grid">
+      <p-card *ngFor="let document of documents" class="document-card" (click)="open(document)">
+        <div class="thumb" *ngIf="document.thumbnailContent as t; else iconAvatar">
+          <img [src]="'data:image/png;base64,' + t" alt="Preview" />
+        </div>
+        <ng-template #iconAvatar>
+          <div class="thumb placeholder">
+            <i class="thumb-icon" [class]="getIcon(document.contentType)"></i>
+          </div>
+        </ng-template>
+
+        <div class="document-info">
+          <h3 class="document-title truncate">{{ document.originalFilename }}</h3>
+          <p class="document-subtitle">{{ document.contentType }} • {{ document.fileSize | fileSize }}</p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div> 

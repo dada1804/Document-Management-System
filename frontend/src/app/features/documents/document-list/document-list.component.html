@@ -1,0 +1,222 @@
+<div class="document-list-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>My Documents</h1>
+    <div class="header-actions">
+      <p-buttonGroup>
+        <p-button 
+          icon="pi pi-th-large" 
+          [outlined]="viewMode !== 'grid'"
+          (click)="setViewMode('grid')"
+          pTooltip="Grid view">
+        </p-button>
+        <p-button 
+          icon="pi pi-list" 
+          [outlined]="viewMode !== 'list'"
+          (click)="setViewMode('list')"
+          pTooltip="List view">
+        </p-button>
+      </p-buttonGroup>
+      <p-button 
+        label="Upload Document" 
+        icon="pi pi-cloud-upload" 
+        routerLink="/documents/upload"
+        class="p-button-primary">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <p-card class="search-card">
+    <ng-template pTemplate="content">
+      <div class="search-filters">
+        <div class="search-field">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input 
+              pInputText 
+              type="text" 
+              [(ngModel)]="searchQuery" 
+              (keyup.enter)="search()" 
+              placeholder="Search by name, description, or tags"
+              class="w-full">
+          </span>
+        </div>
+
+        <div class="sort-field">
+          <p-dropdown 
+            [options]="sortOptions" 
+            [(ngModel)]="sortBy" 
+            (onChange)="loadDocuments()"
+            placeholder="Sort by"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body">
+          </p-dropdown>
+        </div>
+
+        <div class="sort-direction-field">
+          <p-dropdown 
+            [options]="sortDirectionOptions" 
+            [(ngModel)]="sortDir" 
+            (onChange)="loadDocuments()"
+            placeholder="Order"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body">
+          </p-dropdown>
+        </div>
+
+        <p-button 
+          label="Search" 
+          icon="pi pi-search" 
+          (click)="search()" 
+          [disabled]="loading"
+          class="p-button-secondary">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-card>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+    <p>Loading documents...</p>
+  </div>
+
+  <!-- Documents Content -->
+  <div class="documents-content" *ngIf="!loading">
+    <p-card *ngIf="documents.length === 0" class="empty-state">
+      <ng-template pTemplate="content">
+        <div class="empty-content">
+          <i class="pi pi-folder-open empty-icon"></i>
+          <h3>No documents found</h3>
+          <p *ngIf="searchQuery">No documents match your search criteria</p>
+          <p *ngIf="!searchQuery">You haven't uploaded any documents yet</p>
+          <p-button 
+            label="Upload Your First Document" 
+            icon="pi pi-cloud-upload" 
+            routerLink="/documents/upload"
+            class="p-button-primary">
+          </p-button>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Grid view -->
+    <div *ngIf="documents.length > 0 && viewMode === 'grid'" class="documents-grid">
+      <p-card class="document-card" *ngFor="let doc of documents" (click)="viewDocument(doc.id)">
+        <ng-template pTemplate="content">
+          <div class="thumb" *ngIf="doc.thumbnailContent as t; else noThumb">
+            <img [src]="'data:image/png;base64,' + t" alt="Preview" />
+          </div>
+          <ng-template #noThumb>
+            <div class="thumb placeholder" *ngIf="isImage(doc) && previews[doc.id] as src; else iconAvatar">
+              <img [src]="src" alt="Preview" />
+            </div>
+          </ng-template>
+          <ng-template #iconAvatar>
+            <div class="thumb placeholder">
+              <i class="pi" [class]="getFileIcon(doc.contentType)"></i>
+            </div>
+          </ng-template>
+
+          <div class="card-info">
+            <div class="title truncate" [pTooltip]="doc.originalFilename">{{ doc.originalFilename }}</div>
+            <div class="meta">
+              <span class="type-chip">{{ getFileTypeLabel(doc.contentType) }}</span>
+              <span class="sep">•</span>
+              <span>{{ formatFileSize(doc.fileSize) }}</span>
+            </div>
+          </div>
+
+          <div class="document-tags" *ngIf="doc.tags && doc.tags.length > 0">
+            <p-chip *ngFor="let tag of doc.tags.slice(0, 3)" [label]="tag" severity="secondary"></p-chip>
+            <span *ngIf="doc.tags.length > 3" class="more-tags">+{{ doc.tags.length - 3 }}</span>
+          </div>
+        </ng-template>
+        
+        <ng-template pTemplate="footer">
+          <div class="card-actions" (click)="$event.stopPropagation()">
+            <p-button 
+              icon="pi pi-download" 
+              (click)="downloadDocument(doc.id)" 
+              pTooltip="Download"
+              class="p-button-text p-button-rounded">
+            </p-button>
+            <p-menu #menu 
+                    [popup]="true" 
+                    [model]="getDocumentMenuItems(doc)"
+                    appendTo="body">
+            </p-menu>
+            <p-button 
+              icon="pi pi-ellipsis-v" 
+              (click)="menu.toggle($event)" 
+              pTooltip="More options"
+              class="p-button-text p-button-rounded">
+            </p-button>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    <!-- List view -->
+    <p-dataView *ngIf="documents.length > 0 && viewMode === 'list'" 
+                [value]="documents" 
+                [paginator]="false"
+                layout="list"
+                class="document-list">
+      <ng-template pTemplate="list" let-documents>
+        <div class="col-12" *ngFor="let doc of documents" class="col-12">
+          <div class="document-item" (click)="viewDocument(doc.id)">
+            <div class="document-icon">
+              <i class="pi" [class]="getFileIcon(doc.contentType)"></i>
+            </div>
+            
+            <div class="document-info">
+              <div class="document-title truncate">{{ doc.originalFilename }}</div>
+              <div class="document-meta">
+                {{ getFileTypeLabel(doc.contentType) }} • {{ formatFileSize(doc.fileSize) }} • {{ doc.uploadDate | date:'short' }} • {{ doc.downloadCount }} downloads
+              </div>
+              <div class="document-tags" *ngIf="doc.tags && doc.tags.length > 0">
+                <p-chip *ngFor="let tag of doc.tags.slice(0, 3)" [label]="tag" severity="secondary"></p-chip>
+                <span *ngIf="doc.tags.length > 3" class="more-tags">+{{ doc.tags.length - 3 }}</span>
+              </div>
+            </div>
+            
+            <div class="document-actions" (click)="$event.stopPropagation()">
+              <p-button 
+                icon="pi pi-download" 
+                (click)="downloadDocument(doc.id)" 
+                pTooltip="Download"
+                class="p-button-text p-button-rounded">
+              </p-button>
+              <p-menu #menu 
+                      [popup]="true" 
+                      [model]="getDocumentMenuItems(doc)"
+                      appendTo="body">
+              </p-menu>
+              <p-button 
+                icon="pi pi-ellipsis-v" 
+                (click)="menu.toggle($event)" 
+                pTooltip="More options"
+                class="p-button-text p-button-rounded">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-dataView>
+
+    <!-- Pagination -->
+    <p-paginator 
+      *ngIf="documents.length > 0"
+      [rows]="pageSize"
+      [totalRecords]="totalElements"
+      [rowsPerPageOptions]="[5, 10, 25, 50]"
+      (onPageChange)="onPageChange($event)"
+      [showFirstLastIcon]="true"
+      [showPageLinks]="true">
+    </p-paginator>
+  </div>
+</div> 

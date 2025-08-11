@@ -1,0 +1,90 @@
+<div class="document-detail-container" *ngIf="doc">
+  <p-card header="{{ doc.originalFilename }}" subheader="{{ doc.contentType }} • {{ doc.fileSize | number }} bytes" styleClass="preview-card">
+    <div class="preview">
+      <!-- Image -->
+      <img *ngIf="isImage(doc) && fullPreview" [src]="fullPreview" alt="preview" />
+      <!-- PDF -->
+      <iframe *ngIf="isPdf(doc) && fullBlobUrl" [src]="fullBlobUrl" title="PDF preview"></iframe>
+      <!-- Video -->
+      <video *ngIf="isVideo(doc) && fullBlobUrl" [src]="fullBlobUrl" controls></video>
+      <!-- Fallback -->
+      <div *ngIf="!isImage(doc) && !isPdf(doc) && !isVideo(doc)" class="fallback">
+        <i class="pi pi-file-o fallback-icon"></i>
+        <p>No inline preview available</p>
+      </div>
+    </div>
+    
+    <div class="preview-actions">
+      <p-button 
+        label="Download" 
+        icon="pi pi-download" 
+        class="p-button-primary"
+        (click)="download()">
+      </p-button>
+    </div>
+  </p-card>
+
+  <p-card header="Manage Access" subheader="Choose who can access this document" styleClass="access-card">
+    <div class="access-mode">
+      <p-button 
+        [outlined]="accessMode !== 'everyone'"
+        [disabled]="accessMode === 'everyone'"
+        label="Everyone" 
+        icon="pi pi-globe" 
+        (click)="setAccessMode('everyone')"
+        styleClass="access-button">
+      </p-button>
+      <p-button 
+        [outlined]="accessMode !== 'selected'"
+        [disabled]="accessMode !== 'selected'"
+        label="Selected users" 
+        icon="pi pi-users" 
+        (click)="setAccessMode('selected')"
+        styleClass="access-button">
+      </p-button>
+    </div>
+
+    <div *ngIf="accessMode === 'selected'" class="user-select">
+      <p-multiSelect 
+        [(ngModel)]="selectedUserIds" 
+        [options]="users" 
+        optionLabel="username" 
+        optionValue="id"
+        placeholder="Select users"
+        appendTo="body"
+        styleClass="w-100">
+        <ng-template pTemplate="item" let-user>
+          <div class="user-option">
+            <span class="username">{{ user.username }}</span>
+            <span class="email">({{ user.email }})</span>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+      
+      <!-- Display currently selected users -->
+      <div class="selected-users-display" *ngIf="selectedUserIds.length > 0">
+        <h4>Currently Selected Users:</h4>
+        <div class="selected-users-list">
+          <div class="selected-user-item" *ngFor="let userId of selectedUserIds">
+            <span class="selected-username">{{ getUserDisplayName(userId) }}</span>
+            <p-button 
+              icon="pi pi-times" 
+              class="p-button-text p-button-rounded p-button-danger"
+              (click)="removeUser(userId)"
+              pTooltip="Remove user">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="access-actions">
+      <p-button 
+        label="Save" 
+        icon="pi pi-save" 
+        class="p-button-primary"
+        (click)="saveAccess()">
+      </p-button>
+    </div>
+  </p-card>
+</div> 

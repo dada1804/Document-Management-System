@@ -1,0 +1,88 @@
+<div class="upload-container">
+  <p-card header="Upload Document" subheader="Upload a new document to your library" styleClass="upload-card">
+    <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+      <!-- File Upload Area -->
+      <div 
+        class="file-upload-area" 
+        [class.dragover]="isDragOver"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()">
+        
+        <input 
+          #fileInput 
+          type="file" 
+          (change)="onFileSelected($event)" 
+          style="display: none;"
+          accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar">
+        
+        <i class="pi pi-cloud-upload upload-icon"></i>
+        <h3>Drop files here or click to browse</h3>
+        <p>Supported formats: PDF, DOC, DOCX, TXT, JPG, PNG, GIF, ZIP, RAR</p>
+        <p>Maximum file size: 100MB</p>
+        
+        <div *ngIf="selectedFile" class="selected-file">
+          <i [class]="getFileIcon(selectedFile.type)"></i>
+          <span>{{ selectedFile.name }}</span>
+          <span class="file-size">({{ formatFileSize(selectedFile.size) }})</span>
+        </div>
+      </div>
+
+      <!-- Document Details -->
+      <div class="form-fields" *ngIf="selectedFile">
+        <div class="form-field">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            pInputTextarea 
+            id="description"
+            formControlName="description" 
+            rows="3" 
+            placeholder="Enter document description"
+            styleClass="w-100">
+          </textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="tags" class="form-label">Tags</label>
+          <input 
+            pInputText 
+            id="tags"
+            formControlName="tags" 
+            placeholder="Enter tags separated by commas"
+            styleClass="w-100">
+          <small class="form-hint">e.g., work, important, project</small>
+        </div>
+
+        <p-checkbox 
+          formControlName="isPublic" 
+          [binary]="true"
+          label="Make this document public">
+        </p-checkbox>
+      </div>
+
+      <!-- Upload Button -->
+      <div class="upload-actions" *ngIf="selectedFile">
+        <p-button 
+          label="Upload Document" 
+          icon="pi pi-upload" 
+          type="submit" 
+          [disabled]="uploadForm.invalid || uploading"
+          class="p-button-primary upload-button">
+          <ng-template pTemplate="content">
+            <p-progressSpinner *ngIf="uploading" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+            <span *ngIf="!uploading">Upload Document</span>
+          </ng-template>
+        </p-button>
+        
+        <p-button 
+          label="Cancel" 
+          [outlined]="true"
+          type="button" 
+          (click)="clearForm()"
+          [disabled]="uploading">
+        </p-button>
+      </div>
+    </form>
+  </p-card>
+</div> 
