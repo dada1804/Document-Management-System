@@ -449,28 +449,26 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
       border-bottom: none; 
     }
     
-    .document-title { 
-      font-weight: 500; 
+    .document-info { 
       flex: 1;
       min-width: 0;
     }
     
-    .document-details { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 8px; 
-      flex: 1;
-      min-width: 0;
+    .document-title { 
+      font-weight: 500; 
+      margin-bottom: 4px;
     }
     
     .document-meta { 
       color: var(--text-muted); 
       font-size: 13px; 
+      margin-bottom: 8px;
     }
     
     .document-actions { 
       display: flex; 
       gap: 8px; 
+      flex-shrink: 0;
     }
     
     .document-icon {
@@ -481,6 +479,7 @@ import { DocumentService, Document, PageResponse } from '../../../core/services/
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .document-tags {

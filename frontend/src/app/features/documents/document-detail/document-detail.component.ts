@@ -71,6 +71,7 @@ interface UserSummary { id: number; username: string; email: string; firstName: 
             optionLabel="username" 
             optionValue="id"
             placeholder="Select users"
+            appendTo="body"
             styleClass="w-100">
             <ng-template pTemplate="item" let-user>
               <div class="user-option">
